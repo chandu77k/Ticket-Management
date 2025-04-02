@@ -1,51 +1,237 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%; 
+  font-family: Arial, sans-serif;
+}
+
+#container {
+  display: flex;
+  justify-content: center;  
+  align-items: center;     
+  height: 100vh;           
+  width: 190vh;             
+  background-color: #f0f0f0;
+}
+
+.form-container {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;   
+  box-sizing: border-box; 
+}
+
+.form-container .form-label {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.form-container .form-control {
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.form-container .btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+p {
+  color: red;
+  text-align: center;
+  margin-top: 12px;
+}
+
+h6 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+h6 a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+h6 a:hover {
+  text-decoration: underline;
+}
+.container {
+  padding: 20px;
+}
+
+.table {
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 10;    
+}
+
+button.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+button.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+button.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+button.btn-info {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+button.btn-info:hover {
+  background-color: #138496;
+  border-color: #138496;
+}
+
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modal-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.modal-footer button {
+  min-width: 100px;
+}
+
+.table th, .table td {
+  padding: 12px 15px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.table th {
+  background-color: #007bff;
+  color: white;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+button:disabled {
+  opacity: 0.65;
+    cursor: not-allowed;
 }
 
-.card {
-  padding: 2em;
+.ticket-container {
+  padding: 20px;
+  width: 200vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: #f0f0f0;
+  position: relative;
 }
 
-.read-the-docs {
-  color: #888;
+.ticket-buttons-container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 20px;
 }
-tr,td,th{
-  border: 1px solid black;
-  border-collapse: collapse;
+
+.ticket-logout-button, .ticket-users-button, .ticket-new-button {
+  z-index: 10;
 }
-table{
+
+.ticket-logout-button {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.ticket-users-button {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.ticket-new-button {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.ticket-table-container {
   width: 100%;
-  border: 1px solid black;
+  max-width: 100%;
+  max-height: 60vh;
+  overflow-y: auto;
+  margin-top: 10px;
+  position: relative;
+}
+
+.ticket-table {
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
   border-collapse: collapse;
 }
+
+.ticket-table th, .ticket-table td {
+  padding: 12px 15px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.ticket-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.ticket-table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.ticket-modal .modal-header, .ticket-modal .modal-footer {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.ticket-modal .modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.ticket-modal-close-button, .ticket-modal-confirm-button {
+  min-width: 100px;
+}
+
+button:disabled {
+  background-color: #d6d6d6 !important;
+  border-color: #d6d6d6 !important;
+}
+
+

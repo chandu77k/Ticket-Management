@@ -1,5 +1,7 @@
 package com.questk2.dto;
 
+import java.time.LocalDateTime;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -29,16 +31,12 @@ public class TicketDTO {
 	@Schema(description = "Comment for a ticket")
 	private String ticketComment;
 	
-	/**
-     * Always returns false until the ticket is deleted.
-     *
-     * @return false, indicating the ticket is not deleted.
-     */
-	@Schema(description = "Always returns false until deleted")
-	public boolean isDeleted() {
-		return false;
-	}
-	
+	@Schema(description = "Indicates if the ticket is deleted")
+	private boolean isDeleted;
+
+	@Schema(description = "Date when the ticket was deleted")
+	private LocalDateTime deleteDate;
+
 	public String getTitle() {
 		return title;
 	}
@@ -81,6 +79,12 @@ public class TicketDTO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 	
 	

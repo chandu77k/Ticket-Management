@@ -16,7 +16,7 @@ const RouterFile = () => {
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/addTicket" element={<NewTicket selectedTicket={selectedTicket} setSelectedTicket={setSelectedTicket} />} />
                     <Route path="/userTable" element={<UserTable />} />
-                    <Route path="/ticketTable" element={<TicketTable onEdit={setSelectedTicket} />} />
+                    <Route path="/ticketTable" element={<TicketTable onEdit={setSelectedTicket}/>} />
                 </Routes>
             </Router>
         </>

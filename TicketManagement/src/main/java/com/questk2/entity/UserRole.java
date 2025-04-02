@@ -1,6 +1,5 @@
 package com.questk2.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,17 +33,16 @@ public class UserRole {
     private User user;
 	
 	@Schema(description = "Role name for the User")
-	@Column(name = "role")
-	private String role;
+	private String roleName;
 	
 	public UserRole() {
 		
 	}
 
-	public UserRole(User user, String role) {
+	public UserRole(User user, String roleName) {
 		super();
 		this.user = user;
-		this.role = role;
+		this.roleName = roleName;
 	}
 
 	public Long getId() {
@@ -55,12 +53,12 @@ public class UserRole {
 		this.id = id;
 	}
 
-	public String getRole() {
-		return role;
+	public String getRoleName() {
+		return roleName;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 
 	public User getUser() {
@@ -73,8 +71,7 @@ public class UserRole {
 
 	@Override
 	public String toString() {
-		return "UserRole [id=" + id + ", user=" + user + ", role=" + role + "]";
+		return "UserRole [id=" + id + ", user=" + user + ", roleName=" + roleName + "]";
 	}
 
-	
 }

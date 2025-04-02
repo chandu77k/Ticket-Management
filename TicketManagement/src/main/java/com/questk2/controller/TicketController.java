@@ -1,12 +1,10 @@
 package com.questk2.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +17,11 @@ import com.questk2.dto.TicketDTO;
 import com.questk2.entity.Ticket;
 import com.questk2.entity.TicketPriority;
 import com.questk2.entity.TicketStatus;
-import com.questk2.entity.User;
 import com.questk2.repository.TicketPriorityRepository;
 import com.questk2.repository.TicketRepository;
 import com.questk2.repository.TicketStatusRepository;
 import com.questk2.repository.UserRepository;
+import com.questk2.service.TicketOperationService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -47,6 +45,8 @@ public class TicketController {
 	TicketPriorityRepository ticketPriorityRepository;
 	@Autowired
 	TicketStatusRepository ticketStatusRepository;
+	@Autowired
+	TicketOperationService ticketOperationService;
 	
 	/**
      * Retrieves all tickets from the database.
@@ -57,10 +57,9 @@ public class TicketController {
 	@ApiResponse(responseCode = "200", description = "found", content = @Content(schema = @Schema(implementation = String.class)))
 	@ApiResponse(responseCode = "404", description = "Method not found")
 	@ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = String.class)))
-	@GetMapping("/tickets")
-	public List<Ticket> getAllTickets(){
-		List<Ticket> tickets = ticketRepository.findAll();
-		return tickets;
+	@GetMapping("/tickets/{id}")
+	public List<Ticket> getTickets(@PathVariable Long id){
+		return ticketOperationService.getAllTickets(id);
 	}
 	
 	/**
@@ -73,9 +72,8 @@ public class TicketController {
 	@ApiResponse(responseCode = "404", description = "Method not found")
 	@ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = String.class)))
 	@GetMapping("/ticketPriority")
-	public List<TicketPriority> getAllPriorities(){
-		List<TicketPriority> priorities = ticketPriorityRepository.findAll();
-		return priorities;
+	public List<TicketPriority> getPriorities(){
+		return ticketOperationService.getAllPriorities();
 	}
 	
 	/**
@@ -88,9 +86,8 @@ public class TicketController {
 	@ApiResponse(responseCode = "404", description = "Method not found")
 	@ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = String.class)))
 	@GetMapping("/ticketStatus")
-	public List<TicketStatus> getAllStatus(){
-		List<TicketStatus> status = ticketStatusRepository.findAll();
-		return status;
+	public List<TicketStatus> getStatus(){
+		return ticketOperationService.getAllStatus();
 	}
 	
 	/**
@@ -104,20 +101,10 @@ public class TicketController {
 	@PostMapping("/tickets/add")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public void createTicket(@RequestBody TicketDTO ticketDTO) {
-		TicketPriority priority = ticketPriorityRepository.findById(ticketDTO.getPriority()).orElseThrow(()-> new RuntimeException("Priority not found"));
-		TicketStatus status = ticketStatusRepository.findById(ticketDTO.getStatus()).orElseThrow(()-> new RuntimeException("Status not found"));
-		User createdBy = userRepository.findById(ticketDTO.getCreatedBy()).orElseThrow(()-> new RuntimeException("User not found"));
-		User assignedTo = userRepository.findById(ticketDTO.getAssignedTo()).orElseThrow(()-> new RuntimeException("User not found"));
-		
-		Ticket ticket = new Ticket();
-		ticket.setTitle(ticketDTO.getTitle());
-		ticket.setDescription(ticketDTO.getDescription());
-		ticket.setPriority(priority);
-		ticket.setStatus(status);
-		ticket.setCreatedBy(createdBy);
-		ticket.setAssignedTo(assignedTo);
-		ticket.setTicketComment(ticketDTO.getTicketComment());
-		ticketRepository.save(ticket);
+	    if (ticketDTO == null) {
+	        throw new IllegalArgumentException("TicketDTO cannot be null");
+	    }
+	    ticketOperationService.createTicket(ticketDTO);
 	}
 	
 	/**
@@ -131,30 +118,13 @@ public class TicketController {
 	@ApiResponse(responseCode = "200", description = "found", content = @Content(schema = @Schema(implementation = String.class)))
 	@ApiResponse(responseCode = "404", description = "Method not found")
 	@PutMapping("/tickets/update/{id}")
-	public Ticket updateTicket(@PathVariable Long id,@RequestBody TicketDTO ticketDTO) {
-		return ticketRepository.findById(id).map(ticket -> {
-			TicketPriority priority = ticketPriorityRepository.findById(ticketDTO.getPriority()).orElseThrow(()->new RuntimeException("Priority not found"));
-			TicketStatus status = ticketStatusRepository.findById(ticketDTO.getStatus()).orElseThrow(()-> new RuntimeException("Status not found"));
-			User createdBy = userRepository.findById(ticketDTO.getCreatedBy()).orElseThrow(()-> new RuntimeException("User not found"));
-			User assignedTo = userRepository.findById(ticketDTO.getAssignedTo()).orElseThrow(()-> new RuntimeException("User not found"));
-			
-			ticket.setTitle(ticketDTO.getTitle());
-			ticket.setDescription(ticketDTO.getDescription());
-			ticket.setPriority(priority);
-			ticket.setStatus(status);
-			ticket.setCreatedBy(createdBy);
-			ticket.setAssignedTo(assignedTo);
-			ticket.setTicketComment(ticketDTO.getTicketComment());
-			ticket.setModifiedDate(LocalDateTime.now());
-			ticket.setDeleted(ticketDTO.isDeleted());
-			if(ticketDTO.isDeleted()) {
-				ticket.setDeleteDate(LocalDateTime.now());
-			}else {
-				ticket.setDeleteDate(null);
-			}
-			return ticketRepository.save(ticket);
-		}).orElseThrow(()->new RuntimeException("User not found : "+ id));
+	public Ticket updateTicket(@PathVariable Long id, @RequestBody TicketDTO ticketDTO) {
+	    if (id == null || ticketDTO == null) {
+	        throw new IllegalArgumentException("ID or TicketDTO cannot be null");
+	    }
+	    return ticketOperationService.updateTicket(id, ticketDTO);
 	}
+
 	
 	/**
      * Deletes a ticket by ID.
@@ -164,10 +134,9 @@ public class TicketController {
 	@Operation(summary = "delete mapping for tickets", description = "Delete the row using id")
 	@ApiResponse(responseCode = "200", description = "found", content = @Content(schema = @Schema(implementation = String.class)))
 	@ApiResponse(responseCode = "404", description = "Method not found")
-	@DeleteMapping("/tickets/delete/{id}")
-	public void removeTicket(@PathVariable Long id) {
-		Ticket ticket = ticketRepository.findById(id).orElseThrow(()-> new RuntimeException("Ticket not found"));
-		ticketRepository.delete(ticket);
+	@PutMapping("/tickets/delete/{id}")
+	public Ticket removeTicket(@PathVariable Long id, @RequestBody TicketDTO ticketDTO) {
+	    return ticketOperationService.deleteTicket(id, ticketDTO);
 	}
 	
 }

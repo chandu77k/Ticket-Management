@@ -2,6 +2,7 @@ package com.questk2.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -33,7 +34,9 @@ public class UserRoleRequest {
 	private String department;
 	
 	@Schema(description = "Role of the user")
-	private String role;
+	@NotNull(message = "Role cannot be blank")
+	private Long roles;
+
 	public String getUserName() {
 		return userName;
 	}
@@ -70,12 +73,11 @@ public class UserRoleRequest {
 	public void setDepartment(String department) {
 		this.department = department;
 	}
-	public String getRole() {
-		return role;
+	public Long getRole() {
+		return roles;
 	}
-	public void setRole(String role) {
-		this.role = role;
+	public void setRole(Long roles) {
+		this.roles = roles;
 	}
-	
 	
 }
